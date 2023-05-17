@@ -6,7 +6,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -23,16 +25,25 @@ public class TopicoController {
     }
 
     @PostMapping
-    public ResponseEntity<DatosRespuestaTopico> registrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico){
+    public ResponseEntity<DatosRespuestaTopico> registrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico,
+                                                                UriComponentsBuilder uriComponentsBuilder){
         var curso = cursoRepository.getReferenceById(datosRegistroTopico.id_curso());
         var topico = topicoRepository.save(new Topico(datosRegistroTopico, curso));
         DatosRespuestaTopico datosRespuestaTopico = new DatosRespuestaTopico(topico.getId(), topico.getTitulo(), topico.getMensaje(),
                 topico.getFechaCreacion(), topico.getStatus(), topico.getId_autor(), curso);
-        return ResponseEntity.ok(datosRespuestaTopico);
+        URI url = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(topico.getId().toString()).toUri();
+        return ResponseEntity.created(url).body(datosRespuestaTopico);
     }
     @GetMapping
     public ResponseEntity<List<DatosListadoTopico>> listarTopicos(){
         List<DatosListadoTopico> topicos = topicoRepository.findAll().stream().map(DatosListadoTopico::new).toList();
         return ResponseEntity.ok(topicos);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<DatosRespuestaTopico> retornarDatosTopico(@PathVariable Long id) {
+        Topico topico = topicoRepository.getReferenceById(id);
+        var datosTopico = new DatosRespuestaTopico(topico.getId(), topico.getTitulo(), topico.getMensaje(), topico.getFechaCreacion(),
+                topico.getStatus(), topico.getId_autor(), topico.getCurso());
+        return ResponseEntity.ok(datosTopico);
     }
 }
