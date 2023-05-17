@@ -32,4 +32,12 @@ public class Topico {
     @JsonBackReference
     private Curso curso;
 
+    public Topico(DatosRegistroTopico datosRegistroTopico, Curso curso) {
+        this.titulo = datosRegistroTopico.titulo();
+        this.mensaje = datosRegistroTopico.mensaje();
+        this.fechaCreacion = LocalDateTime.now();
+        this.status = StatusTopico.NO_RESPONDIDO;
+        this.id_autor = datosRegistroTopico.id_autor();
+        this.curso = curso;
+    }
 }
