@@ -1,17 +1,13 @@
 package com.alura.apiforo.controller;
 
 import com.alura.apiforo.domain.curso.CursoRepository;
-import com.alura.apiforo.domain.topico.DatosRegistroTopico;
-import com.alura.apiforo.domain.topico.DatosRespuestaTopico;
-import com.alura.apiforo.domain.topico.Topico;
-import com.alura.apiforo.domain.topico.TopicoRepository;
+import com.alura.apiforo.domain.topico.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/topicos")
@@ -33,5 +29,10 @@ public class TopicoController {
         DatosRespuestaTopico datosRespuestaTopico = new DatosRespuestaTopico(topico.getId(), topico.getTitulo(), topico.getMensaje(),
                 topico.getFechaCreacion(), topico.getStatus(), topico.getId_autor(), curso);
         return ResponseEntity.ok(datosRespuestaTopico);
+    }
+    @GetMapping
+    public ResponseEntity<List<DatosListadoTopico>> listarTopicos(){
+        List<DatosListadoTopico> topicos = topicoRepository.findAll().stream().map(DatosListadoTopico::new).toList();
+        return ResponseEntity.ok(topicos);
     }
 }
