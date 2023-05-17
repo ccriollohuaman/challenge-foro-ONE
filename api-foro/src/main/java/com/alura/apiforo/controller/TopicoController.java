@@ -2,6 +2,7 @@ package com.alura.apiforo.controller;
 
 import com.alura.apiforo.domain.curso.CursoRepository;
 import com.alura.apiforo.domain.topico.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,5 +46,13 @@ public class TopicoController {
         var datosTopico = new DatosRespuestaTopico(topico.getId(), topico.getTitulo(), topico.getMensaje(), topico.getFechaCreacion(),
                 topico.getStatus(), topico.getId_autor(), topico.getCurso());
         return ResponseEntity.ok(datosTopico);
+    }
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<DatosRespuestaTopico> actualizarTopico(@PathVariable Long id, @RequestBody @Valid DatosActualizarTopico datosActualizarTopico) {
+        Topico topico = topicoRepository.getReferenceById(id);
+        topico.actualizarTopico(datosActualizarTopico);
+        return ResponseEntity.ok(new DatosRespuestaTopico(topico.getId(), topico.getTitulo(), topico.getMensaje(), topico.getFechaCreacion(),
+                topico.getStatus(), topico.getId_autor(), topico.getCurso()));
     }
 }
