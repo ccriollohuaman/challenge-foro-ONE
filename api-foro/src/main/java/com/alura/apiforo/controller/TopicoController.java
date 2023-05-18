@@ -55,4 +55,10 @@ public class TopicoController {
         return ResponseEntity.ok(new DatosRespuestaTopico(topico.getId(), topico.getTitulo(), topico.getMensaje(), topico.getFechaCreacion(),
                 topico.getStatus(), topico.getId_autor(), topico.getCurso()));
     }
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void eliminarTopico(@PathVariable Long id){
+        var topico = topicoRepository.getReferenceById(id);
+        topicoRepository.delete(topico);
+    }
 }
