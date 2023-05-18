@@ -1,7 +1,9 @@
 package com.alura.apiforo.domain.topico;
 
 import com.alura.apiforo.domain.curso.Curso;
+import com.alura.apiforo.domain.respuesta.Respuesta;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -9,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "topicos")
 @Entity(name = "Topico")
@@ -31,6 +35,9 @@ public class Topico {
     @JoinColumn(name = "id_curso", nullable = false)
     @JsonBackReference
     private Curso curso;
+    @OneToMany(mappedBy = "topico", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<Respuesta> respuestas = new ArrayList<>();
 
     public Topico(DatosRegistroTopico datosRegistroTopico, Curso curso) {
         this.titulo = datosRegistroTopico.titulo();
