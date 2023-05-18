@@ -81,6 +81,18 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>9.5.1</version>
+				<configuration>
+					<url>jdbc:mysql://localhost/api_foro</url>
+					<user>root</user>
+					<password>root</password>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 
