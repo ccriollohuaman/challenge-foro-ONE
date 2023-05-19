@@ -6,5 +6,5 @@ public record DatosRegistroRespuesta(
         @NotNull
         String mensaje,
         @NotNull
-        String id_autor) {
+        Long id_autor) {
 }

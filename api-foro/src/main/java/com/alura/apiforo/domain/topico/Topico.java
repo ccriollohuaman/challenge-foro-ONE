@@ -2,6 +2,7 @@ package com.alura.apiforo.domain.topico;
 
 import com.alura.apiforo.domain.curso.Curso;
 import com.alura.apiforo.domain.respuesta.Respuesta;
+import com.alura.apiforo.domain.usuario.Usuario;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -30,7 +31,10 @@ public class Topico {
     private LocalDateTime fechaCreacion;
     @Enumerated(EnumType.STRING)
     private StatusTopico status;
-    private String id_autor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_autor", nullable = false)
+    @JsonBackReference
+    private Usuario autor;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_curso", nullable = false)
     @JsonBackReference
@@ -39,12 +43,12 @@ public class Topico {
     @JsonManagedReference
     private List<Respuesta> respuestas = new ArrayList<>();
 
-    public Topico(DatosRegistroTopico datosRegistroTopico, Curso curso) {
+    public Topico(DatosRegistroTopico datosRegistroTopico, Curso curso, Usuario autor) {
         this.titulo = datosRegistroTopico.titulo();
         this.mensaje = datosRegistroTopico.mensaje();
         this.fechaCreacion = LocalDateTime.now();
         this.status = StatusTopico.NO_RESPONDIDO;
-        this.id_autor = datosRegistroTopico.id_autor();
+        this.autor = autor;
         this.curso = curso;
     }
     public void actualizarTopico(DatosActualizarTopico datosActualizarTopico) {

@@ -1,6 +1,7 @@
 package com.alura.apiforo.domain.respuesta;
 
 import com.alura.apiforo.domain.topico.Topico;
+import com.alura.apiforo.domain.usuario.Usuario;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,14 +29,26 @@ public class Respuesta {
     private Topico topico;
 
     private LocalDateTime fechaCreacion;
-    private String id_autor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_autor", nullable = false)
+    @JsonBackReference
+    private Usuario autor;
     private Boolean solucion;
 
-    public Respuesta(DatosRegistroRespuesta datosRegistroRespuesta, Topico topico) {
+    public Respuesta(DatosRegistroRespuesta datosRegistroRespuesta, Topico topico, Usuario autor) {
         this.mensaje = datosRegistroRespuesta.mensaje();
         this.topico = topico;
         this.fechaCreacion = LocalDateTime.now();
-        this.id_autor = datosRegistroRespuesta.id_autor();
+        this.autor = autor;
         this.solucion = false;
+    }
+
+    public void actualizarTopico(DatosActualizarRespuesta datosActualizarRespuesta) {
+        if (datosActualizarRespuesta.mensaje() != null) {
+            this.mensaje = datosActualizarRespuesta.mensaje();
+        }
+        if (datosActualizarRespuesta.solucion() != null) {
+            this.solucion = datosActualizarRespuesta.solucion();
+        }
     }
 }

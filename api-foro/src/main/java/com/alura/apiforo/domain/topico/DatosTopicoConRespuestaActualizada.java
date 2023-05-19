@@ -1,12 +1,13 @@
 package com.alura.apiforo.domain.topico;
 
 import com.alura.apiforo.domain.curso.Curso;
+import com.alura.apiforo.domain.respuesta.DatosMostrarRespuesta;
 import com.alura.apiforo.domain.usuario.DatosMostrarUsuario;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-public record DatosRespuestaTopico(
+public record DatosTopicoConRespuestaActualizada(
         Long id,
         String titulo,
         String mensaje,
@@ -14,5 +15,6 @@ public record DatosRespuestaTopico(
         LocalDateTime fechaCreacion,
         StatusTopico status,
         DatosMostrarUsuario autor,
-        Curso curso) {
+        Curso curso,
+        DatosMostrarRespuesta respuestas) {
 }
