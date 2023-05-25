@@ -3,9 +3,10 @@ package com.alura.apiforo.domain.topico;
 import com.alura.apiforo.domain.curso.Curso;
 import com.alura.apiforo.domain.usuario.DatosMostrarUsuario;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
-
+@Schema(description = "Datos a mostrar de cada tópico")
 public record DatosListadoTopico(
         Long id,
         String titulo,

@@ -2,8 +2,10 @@ package com.alura.apiforo.controller;
 
 import com.alura.apiforo.domain.usuario.DatosAutenticacionUsuario;
 import com.alura.apiforo.domain.usuario.Usuario;
-import com.alura.apiforo.infra.security.DatosJWTToken;
+import com.alura.apiforo.infra.security.DatosJWToken;
 import com.alura.apiforo.infra.security.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
+@Tag(name = "Autenticación", description = "Operación de inicio de sesión y generación de JWT")
 public class AutenticacionController {
 
     private final AuthenticationManager authenticationManager;
@@ -29,13 +32,14 @@ public class AutenticacionController {
     }
 
     @PostMapping
-    public ResponseEntity<DatosJWTToken> autenticarUsuario(@RequestBody @Valid
+    @Operation(summary = "Autenticar usuario")
+    public ResponseEntity<DatosJWToken> autenticarUsuario(@RequestBody @Valid
                                                                DatosAutenticacionUsuario datosAutenticacionUsuario) {
         Authentication authToken = new UsernamePasswordAuthenticationToken(datosAutenticacionUsuario.email(),
                 datosAutenticacionUsuario.contrasena());
         var usuarioAutenticado = authenticationManager.authenticate(authToken);
-        var JWTtoken = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
-        return ResponseEntity.ok(new DatosJWTToken(JWTtoken));
+        var JWToken = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
+        return ResponseEntity.ok(new DatosJWToken(JWToken));
     }
 
 }
